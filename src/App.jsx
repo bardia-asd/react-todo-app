@@ -1,12 +1,40 @@
 import { useState } from "react";
 import TodoForm from "./components/TodoForm";
+import TodoItem from "./components/TodoItem";
 
 function App() {
+    const [todos, setTodos] = useState([]);
     const [newTaskText, setNewTaskText] = useState("");
 
     const addTodo = (e) => {
         e.preventDefault();
+        const newTodo = {
+            id: Date.now(),
+            text: newTaskText,
+            completed: false,
+        };
+        setTodos([...todos, newTodo]);
         setNewTaskText("");
+    };
+
+    const toggleTodo = (id) => {
+        setTodos(
+            todos.map((todo) =>
+                todo.id === id ? { ...todo, completed: !todo.completed } : todo
+            )
+        );
+    };
+
+    const editTodo = (id, newText) => {
+        setTodos(
+            todos.map((todo) =>
+                todo.id === id ? { ...todo, text: newText } : todo
+            )
+        );
+    };
+
+    const deleteTodo = (id) => {
+        setTodos(todos.filter((todo) => todo.id !== id));
     };
 
     return (
@@ -24,6 +52,28 @@ function App() {
                     onChange={(e) => setNewTaskText(e.target.value)}
                     onSubmit={addTodo}
                 />
+
+                <div className="space-y-3 mt-6">
+                    {todos.length === 0 ? (
+                        <div className="py-10 bg-white rounded-lg border border-gray-200 text-center">
+                            <p className="text-gray-400">
+                                No tasks yet. Add one to get started!
+                            </p>
+                        </div>
+                    ) : (
+                        todos.map((todo) => (
+                            <TodoItem
+                                key={todo.id}
+                                id={todo.id}
+                                text={todo.text}
+                                completed={todo.completed}
+                                onToggle={toggleTodo}
+                                onEdit={editTodo}
+                                onDelete={deleteTodo}
+                            />
+                        ))
+                    )}
+                </div>
             </main>
         </div>
     );
