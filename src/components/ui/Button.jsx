@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function Button({
     children,
     onClick,
@@ -13,7 +11,7 @@ export default function Button({
         primary:
             "bg-blue-600 text-white px-6 py-2 hover:bg-blue-700 disabled:hover:bg-blue-600",
         secondary:
-            "border border-gray-300 text-gray-900 px-4 py-1.5 hover:bg-gray-50",
+            "bg-white border border-gray-300 text-gray-900 px-4 py-1.5 hover:bg-gray-50",
         danger: "bg-red-600 text-white px-4 py-1.5 hover:bg-red-700",
         icon: "w-8 h-8 p-0 text-gray-600 hover:bg-gray-100 rounded-sm",
         success: "w-8 h-8 p-0 text-green-600 hover:bg-green-50 rounded-sm",
