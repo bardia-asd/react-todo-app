@@ -1,40 +1,17 @@
 import { useState } from "react";
+import { useLocalStorageTodos } from "./hooks/useLocalStorageTodos";
 import TodoForm from "./components/TodoForm";
 import TodoItem from "./components/TodoItem";
 
 function App() {
-    const [todos, setTodos] = useState([]);
     const [newTaskText, setNewTaskText] = useState("");
+    const { todos, addTodo, toggleTodo, editTodo, deleteTodo } =
+        useLocalStorageTodos(newTaskText);
 
-    const addTodo = (e) => {
+    const handleAddTodo = (e) => {
         e.preventDefault();
-        const newTodo = {
-            id: Date.now(),
-            text: newTaskText,
-            completed: false,
-        };
-        setTodos([...todos, newTodo]);
+        addTodo(newTaskText);
         setNewTaskText("");
-    };
-
-    const toggleTodo = (id) => {
-        setTodos(
-            todos.map((todo) =>
-                todo.id === id ? { ...todo, completed: !todo.completed } : todo
-            )
-        );
-    };
-
-    const editTodo = (id, newText) => {
-        setTodos(
-            todos.map((todo) =>
-                todo.id === id ? { ...todo, text: newText } : todo
-            )
-        );
-    };
-
-    const deleteTodo = (id) => {
-        setTodos(todos.filter((todo) => todo.id !== id));
     };
 
     return (
@@ -50,7 +27,7 @@ function App() {
                 <TodoForm
                     value={newTaskText}
                     onChange={(e) => setNewTaskText(e.target.value)}
-                    onSubmit={addTodo}
+                    onSubmit={handleAddTodo}
                 />
 
                 <div className="space-y-3 mt-6">

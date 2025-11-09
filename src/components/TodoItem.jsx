@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Pen, Trash2, Check, X } from "lucide-react";
 
 export default function TodoItem({
@@ -13,6 +13,12 @@ export default function TodoItem({
     const [editText, setEditText] = useState(text);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        if (isEditing && inputRef.current) inputRef.current.focus();
+    }, [isEditing]);
+
     const handleEdit = () => {
         if (editText.trim()) {
             onEdit(id, editText);
@@ -25,6 +31,10 @@ export default function TodoItem({
         setShowDeleteDialog(false);
     };
 
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") handleEdit();
+    };
+
     return (
         <>
             <div className="group flex items-center justify-between gap-3 p-4 bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all duration-200">
@@ -34,6 +44,8 @@ export default function TodoItem({
                             type="text"
                             value={editText}
                             onChange={(e) => setEditText(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            ref={inputRef}
                             className="w-full py-1 px-2 rounded-sm border border-blue-500 focus:outline-0 focus:ring-2 focus:ring-blue-600 transition-all duration-150"
                         />
                     ) : (
